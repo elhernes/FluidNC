@@ -67,7 +67,8 @@ namespace ATCs {
 
         // M6T0 is used to reset this ATC and allow us to start a new job
         if (new_tool == 0) {
-            _prev_tool = new_tool;
+            _prev_tool            = new_tool;
+            gc_state.current_tool = new_tool;  // GCode.cpp leaves current_tool to the ATC on M6
             move_to_safe_z();
             move_to_change_location();
             reset();
@@ -93,11 +94,13 @@ namespace ATCs {
                 if (was_inch_mode) {
                     _macro.addf("G20");
                 }
-                _prev_tool = new_tool;
+                _prev_tool            = new_tool;
+                gc_state.current_tool = new_tool;
                 return _macro.run(channel, true);
             }
 
-            _prev_tool = new_tool;
+            _prev_tool            = new_tool;
+            gc_state.current_tool = new_tool;
 
             // save current location, so we can return after the tool change.
             _macro.addf("#<start_x >= #<_x>");
